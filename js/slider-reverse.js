@@ -22,6 +22,7 @@
 				navigation    : false,
 				speed         : "normal",
 				swipe         : false,
+				swipeLimit    : false,
 				responsive    : false,
 				width         : "100%"
 			}, options);
@@ -145,11 +146,53 @@
 					
 					if (settings.swipe) {
 						rs.engine.swipe({
-							swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-								(direction == "left") ? rs.next.click() : (direction == "right") ? rs.prev.click() : null;
-							},
-							threshold:0,
-							fingers:'all'
+							threshold   : 0,
+							swipeStatus : function(event, phase, direction, distance, duration, fingerCount){
+								
+								if (direction == 'left') {
+									
+									var distancePoint = rs.wrapper.width() * (rs.current - 1) + distance;
+									
+									rs.engine.stop().css('margin-left', '-' + distancePoint + 'px');
+									
+									if (distance > settings.swipeLimit && phase == 'end') {
+										
+										(rs.current < rs.count) ? 
+											rs.sliderAnimate('-' + rs.wrapper.width() * rs.current, ++rs.current) :
+											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.count - 1), rs.current);
+										
+									} else if (distance < settings.swipeLimit && phase == 'end') {
+										
+										rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current - 1), rs.current);
+										
+									}
+									
+								}
+								
+								if (direction == 'right') {
+									
+									var distancePoint = (rs.wrapper.width() * (rs.current - 1));
+									
+									(rs.current == 1) ?
+										rs.engine.stop().css('margin-left', (distancePoint + distance) + 'px') :
+										rs.engine.stop().css('margin-left', '-' + (distancePoint - distance) + 'px');
+									
+									if (distance > settings.swipeLimit && phase == 'end') {
+										
+										(rs.current > 1) ?
+											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current-2), --rs.current) :
+											rs.sliderAnimate(0, rs.current = 1);
+										
+									} else if (distance < settings.swipeLimit && phase == 'end') {
+										
+										rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current - 1), rs.current);
+										
+									}
+									
+								}
+								
+							}
+							
 						});
 					}
 			
