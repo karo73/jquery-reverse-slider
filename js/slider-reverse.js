@@ -11,6 +11,7 @@
 	$.fn.sliderReverse = function(options){
 			
 		var settings = $.extend({
+				animateType   : false,
 				autoPlaySpeed : false,
 				btnsText      : {
 					next      : "",
@@ -59,7 +60,9 @@
 							$(".slider-nav-items", rs.wrapper).eq(curElem - 1).addClass("active");
 						}
 						
-						rs.engine.stop(false, true).animate({marginLeft: point + "px"}, settings.speed);
+						rs.engine.stop(false, true).animate({marginLeft: point + "px"}, settings.speed, settings.animateType, function(){
+							rs.engine.removeClass('moving');
+						});
 					}
 					
 					// Pagination
@@ -145,11 +148,30 @@
 					// Swipe
 					
 					if (settings.swipe) {
+						
+						rs.linkPreventClick = function( elem ) {
+							
+							elem.click(function(){
+										
+								if ( rs.engine.hasClass('moving') ) {
+									return false;
+								}
+								
+							});
+							
+						};
+						
 						rs.engine.swipe({
 							threshold   : 0,
+							excludedElements : 'button, input, select, textarea, .noSwipe',
+							allowPageScroll  : 'vertical',
 							swipeStatus : function(event, phase, direction, distance, duration, fingerCount){
 								
 								if (direction == 'left') {
+									
+									rs.engine.addClass('moving');
+								
+									rs.linkPreventClick( $('.slider-box', rs.wrapper) );
 									
 									var distancePoint = rs.wrapper.width() * (rs.current - 1) + distance;
 									
@@ -170,6 +192,10 @@
 								}
 								
 								if (direction == 'right') {
+									
+									rs.engine.addClass('moving');
+								
+									rs.linkPreventClick( $('.slider-box', rs.wrapper) );
 									
 									var distancePoint = (rs.wrapper.width() * (rs.current - 1));
 									
