@@ -167,7 +167,7 @@
 							allowPageScroll  : 'vertical',
 							swipeStatus : function(event, phase, direction, distance, duration, fingerCount){
 								
-								if (direction == 'left') {
+								if (direction == 'left' && distance) {
 									
 									rs.engine.addClass('moving');
 								
@@ -191,7 +191,7 @@
 									
 								}
 								
-								if (direction == 'right') {
+								if (direction == 'right' && distance) {
 									
 									rs.engine.addClass('moving');
 								
