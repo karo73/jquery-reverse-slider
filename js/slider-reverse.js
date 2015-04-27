@@ -177,13 +177,13 @@
 									
 									rs.engine.stop().css('margin-left', '-' + distancePoint + 'px');
 									
-									if (distance > settings.swipeLimit && phase == 'end') {
+									if (distance >= settings.swipeLimit && phase == 'end') {
 										
 										(rs.current < rs.count) ? 
 											rs.sliderAnimate('-' + rs.wrapper.width() * rs.current, ++rs.current) :
 											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.count - 1), rs.current);
 										
-									} else if (distance < settings.swipeLimit && phase == 'end') {
+									} else if (distance <= settings.swipeLimit && phase == 'end') {
 										
 										rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current - 1), rs.current);
 										
@@ -203,13 +203,13 @@
 										rs.engine.stop().css('margin-left', (distancePoint + distance) + 'px') :
 										rs.engine.stop().css('margin-left', '-' + (distancePoint - distance) + 'px');
 									
-									if (distance > settings.swipeLimit && phase == 'end') {
+									if (distance >= settings.swipeLimit && phase == 'end') {
 										
 										(rs.current > 1) ?
 											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current-2), --rs.current) :
 											rs.sliderAnimate(0, rs.current = 1);
 										
-									} else if (distance < settings.swipeLimit && phase == 'end') {
+									} else if (distance <= settings.swipeLimit && phase == 'end') {
 										
 										rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current - 1), rs.current);
 										
