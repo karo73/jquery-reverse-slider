@@ -162,12 +162,12 @@
 						};
 						
 						rs.engine.swipe({
-							threshold   : 0,
+							threshold        : 0,
 							excludedElements : 'button, input, select, textarea, .noSwipe',
 							allowPageScroll  : 'vertical',
-							swipeStatus : function(event, phase, direction, distance, duration, fingerCount){
+							swipeStatus      : function(event, phase, direction, distance, duration, fingerCount){
 								
-								if (direction == 'left' && distance) {
+								if ((direction == 'left' || direction == 'up') && distance) {
 									
 									rs.engine.addClass('moving');
 								
@@ -181,17 +181,23 @@
 										
 										(rs.current < rs.count) ? 
 											rs.sliderAnimate('-' + rs.wrapper.width() * rs.current, ++rs.current) :
-											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.count - 1), rs.current);
+												rs.sliderAnimate('-' + rs.wrapper.width() * (rs.count - 1), rs.current);
 										
 									} else if (distance <= settings.swipeLimit && phase == 'end') {
 										
 										rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current - 1), rs.current);
 										
+									} else if (phase == 'cancel') {
+										
+										(rs.current < rs.count) ? 
+											rs.sliderAnimate('-' + rs.wrapper.width() * rs.current, ++rs.current) :
+												rs.sliderAnimate('-' + rs.wrapper.width() * (rs.count - 1), rs.current);
+										
 									}
 									
 								}
 								
-								if (direction == 'right' && distance) {
+								if ((direction == 'right' || direction == 'down') && distance) {
 									
 									rs.engine.addClass('moving');
 								
@@ -207,11 +213,17 @@
 										
 										(rs.current > 1) ?
 											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current-2), --rs.current) :
-											rs.sliderAnimate(0, rs.current = 1);
+												rs.sliderAnimate(0, rs.current = 1);
 										
 									} else if (distance <= settings.swipeLimit && phase == 'end') {
 										
 										rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current - 1), rs.current);
+										
+									} else if ( phase == 'cancel') {
+										
+										(rs.current > 1) ?
+											rs.sliderAnimate('-' + rs.wrapper.width() * (rs.current-2), --rs.current) :
+												rs.sliderAnimate(0, rs.current = 1);
 										
 									}
 									
